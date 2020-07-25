@@ -19,6 +19,19 @@ char* GetString(SMBIOS_HEADER* header, SMBIOS_STRING string)
 	return const_cast<char*>(start);
 }
 
+void RandomizeString(char* string)
+{
+	const auto length = static_cast<int>(strlen(string));
+
+	auto* buffer = static_cast<char*>(ExAllocatePoolWithTag(NonPagedPool, length, POOL_TAG));
+	Utils::RandomText(buffer, length);
+	buffer[length] = '\0';
+
+	memcpy(string, buffer, length);
+
+	ExFreePool(buffer);
+}
+
 NTSTATUS ProcessTable(SMBIOS_HEADER* header)
 {
 	if (!header->Length)
@@ -27,15 +40,50 @@ NTSTATUS ProcessTable(SMBIOS_HEADER* header)
 	if (header->Type == 0)
 	{
 		auto* type0 = reinterpret_cast<SMBIOS_TYPE0*>(header);
-		Log::Print("test: %u\n", type0->BiosVersion);
-		Log::Print("test: %u\n", type0->BiosSize);
 
-		auto* text = GetString(header, type0->Vendor);
-		Log::Print("Vendor: %s\n", text);
-		auto* text2 = GetString(header, type0->BiosVersion);
-		Log::Print("Version: %s\n", text2);
+		auto* vendor = GetString(header, type0->Vendor);
+		RandomizeString(vendor);
 	}
 
+	if (header->Type == 1)
+	{
+		auto* type1 = reinterpret_cast<SMBIOS_TYPE1*>(header);
+
+		auto* manufacturer = GetString(header, type1->Manufacturer);
+		RandomizeString(manufacturer);
+
+		auto* productName = GetString(header, type1->ProductName);
+		RandomizeString(productName);
+
+		auto* serialNumber = GetString(header, type1->SerialNumber);
+		RandomizeString(serialNumber);
+	}
+
+	if (header->Type == 2)
+	{
+		auto* type2 = reinterpret_cast<SMBIOS_TYPE2*>(header);
+
+		auto* manufacturer = GetString(header, type2->Manufacturer);
+		RandomizeString(manufacturer);
+
+		auto* productName = GetString(header, type2->ProductName);
+		RandomizeString(productName);
+
+		auto* serialNumber = GetString(header, type2->SerialNumber);
+		RandomizeString(serialNumber);
+	}
+
+	if (header->Type == 3)
+	{
+		auto* type3 = reinterpret_cast<SMBIOS_TYPE3*>(header);
+
+		auto* manufacturer = GetString(header, type3->Manufacturer);
+		RandomizeString(manufacturer);
+
+		auto* serialNumber = GetString(header, type3->SerialNumber);
+		RandomizeString(serialNumber);
+	}
+	
 	return STATUS_SUCCESS;
 }
 
