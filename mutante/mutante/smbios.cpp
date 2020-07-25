@@ -39,10 +39,8 @@ NTSTATUS ProcessTable(SMBIOS_HEADER* header)
 	return STATUS_SUCCESS;
 }
 
-NTSTATUS LoopTables(void* mapped)
+NTSTATUS LoopTables(void* mapped, ULONG size)
 {
-	const int size = 256;
-
 	auto* endAddress = static_cast<char*>(mapped) + size;
 	while (true)
 	{
@@ -59,8 +57,6 @@ NTSTATUS LoopTables(void* mapped)
 
 		mapped = end;
 	}
-
-	MmUnmapIoSpace(mapped, size);
 	
 	return STATUS_SUCCESS;
 }
@@ -109,7 +105,7 @@ NTSTATUS Smbios::ChangeSmbiosSerials()
 		return STATUS_UNSUCCESSFUL;
 	}
 	
-	LoopTables(mapped);
+	LoopTables(mapped, size);
 	
 	MmUnmapIoSpace(mapped, size);
 	
