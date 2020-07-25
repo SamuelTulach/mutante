@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mutante", "mutante\mutante.vcxproj", "{480E5683-CED9-4028-BB1F-EC4E78D555DA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		BuildThis|ARM = BuildThis|ARM
+		BuildThis|ARM64 = BuildThis|ARM64
+		BuildThis|x64 = BuildThis|x64
+		BuildThis|x86 = BuildThis|x86
+		Debug|ARM = Debug|ARM
+		Debug|ARM64 = Debug|ARM64
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|ARM.ActiveCfg = Release|ARM
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|ARM.Build.0 = Release|ARM
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|ARM.Deploy.0 = Release|ARM
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|ARM64.ActiveCfg = Release|ARM64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|ARM64.Build.0 = Release|ARM64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|ARM64.Deploy.0 = Release|ARM64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|x64.ActiveCfg = Release|x64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|x64.Build.0 = Release|x64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|x64.Deploy.0 = Release|x64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|x86.ActiveCfg = Release|Win32
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|x86.Build.0 = Release|Win32
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.BuildThis|x86.Deploy.0 = Release|Win32
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|ARM.ActiveCfg = Debug|ARM
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|ARM.Build.0 = Debug|ARM
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|ARM.Deploy.0 = Debug|ARM
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|ARM64.Build.0 = Debug|ARM64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|x64.ActiveCfg = Debug|x64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|x64.Build.0 = Debug|x64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|x64.Deploy.0 = Debug|x64
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|x86.ActiveCfg = Debug|Win32
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|x86.Build.0 = Debug|Win32
+		{480E5683-CED9-4028-BB1F-EC4E78D555DA}.Debug|x86.Deploy.0 = Debug|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5CB7A328-59DC-4452-9A61-741C429B1572}
+	EndGlobalSection
+EndGlobal
