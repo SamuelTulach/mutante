@@ -4,7 +4,13 @@
 #include "shared.h"
 #include "smbios.h"
 
-char* GetString(SMBIOS_HEADER* header, SMBIOS_STRING string)
+/**
+ * \brief Get's the string from SMBIOS table
+ * \param header Table header
+ * \param string String itself
+ * \return Pointer to the null terminated string
+ */
+char* Smbios::GetString(SMBIOS_HEADER* header, SMBIOS_STRING string)
 {
 	const auto* start = reinterpret_cast<const char*>(header) + header->Length;
 
@@ -19,7 +25,11 @@ char* GetString(SMBIOS_HEADER* header, SMBIOS_STRING string)
 	return const_cast<char*>(start);
 }
 
-void RandomizeString(char* string)
+/**
+ * \brief Replace string at a given location by randomized string with same length
+ * \param string Pointer to string (has to be null terminated)
+ */
+void Smbios::RandomizeString(char* string)
 {
 	const auto length = static_cast<int>(strlen(string));
 
@@ -32,7 +42,12 @@ void RandomizeString(char* string)
 	ExFreePool(buffer);
 }
 
-NTSTATUS ProcessTable(SMBIOS_HEADER* header)
+/**
+ * \brief Modify information in the table of given header
+ * \param header Table header (only 0-3 implemented)
+ * \return 
+ */
+NTSTATUS Smbios::ProcessTable(SMBIOS_HEADER* header)
 {
 	if (!header->Length)
 		return STATUS_UNSUCCESSFUL;
@@ -87,7 +102,13 @@ NTSTATUS ProcessTable(SMBIOS_HEADER* header)
 	return STATUS_SUCCESS;
 }
 
-NTSTATUS LoopTables(void* mapped, ULONG size)
+/**
+ * \brief Loop through SMBIOS tables with provided first table header
+ * \param mapped Header of the first table
+ * \param size Size of all tables including strings
+ * \return 
+ */
+NTSTATUS Smbios::LoopTables(void* mapped, ULONG size)
 {
 	auto* endAddress = static_cast<char*>(mapped) + size;
 	while (true)
@@ -109,6 +130,11 @@ NTSTATUS LoopTables(void* mapped, ULONG size)
 	return STATUS_SUCCESS;
 }
 
+/**
+ * \brief Find SMBIOS physical address, map it and then loop through
+ * table 0-3 and modify possible identifiable information
+ * \return Status of the change (will return STATUS_SUCCESS if mapping was successful)
+ */
 NTSTATUS Smbios::ChangeSmbiosSerials()
 {
 	auto* base = Utils::GetModuleBase("ntoskrnl.exe");

@@ -28,10 +28,5 @@ extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT object, PUNICODE_STRING registry)
 	Disks::DisableSmart();
 	Smbios::ChangeSmbiosSerials();
 
-	// TODO: add credits
-	// - https://www.unknowncheats.me/forum/anti-cheat-bypass/310941-hdd-serial-spoofer-hooking-4.html
-	// - https://github.com/btbd/hwid/blob/master/Kernel/main.c
-	// - https://github.com/KunYi/DumpSMBIOS/blob/master/DumpSMBIOS/smbios.cpp#L285
-
 	return STATUS_SUCCESS;
 }
