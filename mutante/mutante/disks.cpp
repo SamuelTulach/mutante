@@ -5,6 +5,16 @@
 #include "log.h"
 #include "disks.h"
 
+
+/**
+ * \brief Null smart mask in raid extension to disable S.M.A.R.T functionality
+ * \param extension Pointer to disk's raid unit extension
+ */
+void Disks::DisableSmartBit(PRAID_UNIT_EXTENSION extension)
+{
+	extension->_Smart.Telemetry.SmartMask = 0;
+}
+
 /**
  * \brief Get pointer to device object of desired raid port of given name
  * \param deviceName Name of the raid port (path ex. \\Device\\RaidPort0)
@@ -42,22 +52,33 @@ NTSTATUS Disks::DiskLoop(PDEVICE_OBJECT deviceArray, RaidUnitRegisterInterfaces 
 		if (deviceArray->DeviceType == FILE_DEVICE_DISK)
 		{
 			auto* extension = static_cast<PRAID_UNIT_EXTENSION>(deviceArray->DeviceExtension);
-			const auto length = extension->Identity.SerialNumber.Length;
+			if (!extension)
+				continue;
+			
+			const auto length = extension->_Identity.Identity.SerialNumber.Length;
+			if (!length)
+				continue;
 
 			char original[256];
-			memcpy(original, extension->Identity.SerialNumber.Buffer, length);
+			memcpy(original, extension->_Identity.Identity.SerialNumber.Buffer, length);
 			original[length] = '\0';
 
 			auto* buffer = static_cast<char*>(ExAllocatePoolWithTag(NonPagedPool, length, POOL_TAG));
 			buffer[length] = '\0';
 
 			Utils::RandomText(buffer, length);
-			RtlInitString(&extension->Identity.SerialNumber, buffer);
+			RtlInitString(&extension->_Identity.Identity.SerialNumber, buffer);
 
 			Log::Print("Changed disk serial %s to %s.\n", original, buffer);
 
 			status = STATUS_SUCCESS;
 			ExFreePool(buffer);
+
+			/*
+			 * On some devices DiskEnableDisableFailurePrediction will fail
+			 * Setting the bits directly will not fail and should work on any device
+			 */
+			DisableSmartBit(extension);
 
 			registerInterfaces(extension);
 		}
@@ -165,9 +186,7 @@ NTSTATUS Disks::DisableSmart()
 	for (ULONG i = 0; i < numberOfDeviceObjects; ++i)
 	{
 		auto* deviceObject = deviceObjectList[i];
-		status = disableFailurePrediction(deviceObject->DeviceExtension, false);
-		
-		Log::Print("Disabling smart on 0x%p with status %x", deviceObject, status);	
+		disableFailurePrediction(deviceObject->DeviceExtension, false);
 		ObDereferenceObject(deviceObject);
 	}
 

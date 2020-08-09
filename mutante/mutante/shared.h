@@ -128,11 +128,37 @@ typedef struct _STOR_SCSI_IDENTITY
 	STRING SerialNumber;
 } STOR_SCSI_IDENTITY, *PSTOR_SCSI_IDENTITY;
 
+typedef struct _TELEMETRY_UNIT_EXTENSION
+{
+	/*
+		+0x000 Flags            : <anonymous-tag>
+		+0x000 DeviceHealthEventsLogged : Pos 0, 1 Bit
+		+0x000 FailedFirstSMARTCommand : Pos 1, 1 Bit
+		+0x000 FailedFirstDeviceStatisticsLogCommand : Pos 2, 1 Bit
+		+0x000 FailedFirstNvmeCloudSSDCommand : Pos 3, 1 Bit
+		+0x000 SmartPredictFailure : Pos 4, 1 Bit
+		+0x000 Reserved         : Pos 5, 27 Bits
+	 */
+	int SmartMask;
+} TELEMETRY_UNIT_EXTENSION, * PTELEMETRY_UNIT_EXTENSION;
+
 // lkd> dt storport!_RAID_UNIT_EXTENSION -b
 typedef struct _RAID_UNIT_EXTENSION
 {
-	char Space[0x68]; // +0x068 Identity         : _STOR_SCSI_IDENTITY
-	STOR_SCSI_IDENTITY Identity;
+	union
+	{
+		struct
+		{
+			char Space[0x68]; // +0x068 Identity         : _STOR_SCSI_IDENTITY
+			STOR_SCSI_IDENTITY Identity;
+		} _Identity;
+
+		struct
+		{
+			char Space[0x7c8]; // +0x7c8 TelemetryExtension : _TELEMETRY_UNIT_EXTENSION
+			TELEMETRY_UNIT_EXTENSION Telemetry;
+		} _Smart;
+	};
 } RAID_UNIT_EXTENSION, *PRAID_UNIT_EXTENSION;
 
 typedef __int64(__fastcall* RaidUnitRegisterInterfaces)(PRAID_UNIT_EXTENSION a1);
