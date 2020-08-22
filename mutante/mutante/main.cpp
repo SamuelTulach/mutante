@@ -24,8 +24,8 @@ extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT object, PUNICODE_STRING registry)
 
 	Log::Print("Driver loaded. Build on %s.", __DATE__);
 
-	Disks::ChangeDiskSerials();
 	Disks::DisableSmart();
+	Disks::ChangeDiskSerials();
 	Smbios::ChangeSmbiosSerials();
 
 	return STATUS_SUCCESS;
