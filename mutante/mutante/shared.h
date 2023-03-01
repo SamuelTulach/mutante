@@ -1,4 +1,5 @@
 #pragma once
+
 #include <ntifs.h>
 
 #define POOL_TAG 'oamL'

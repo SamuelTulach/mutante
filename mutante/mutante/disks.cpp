@@ -103,7 +103,7 @@ NTSTATUS Disks::ChangeDiskSerials()
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	const auto registerInterfaces = static_cast<RaidUnitRegisterInterfaces>(Utils::FindPatternImage(base, "\x48\x89\x5C\x24\x00\x55\x56\x57\x48\x83\xEC\x50", "xxxx?xxxxxxx")); // RaidUnitRegisterInterfaces
+	const auto registerInterfaces = (RaidUnitRegisterInterfaces)(Utils::FindPatternImage(base, "\x48\x89\x5C\x24\x00\x55\x56\x57\x48\x83\xEC\x50", "xxxx?xxxxxxx")); // RaidUnitRegisterInterfaces
 	if (!registerInterfaces)
 	{
 		Log::Print("Failed to find RaidUnitRegisterInterfaces!\n");
@@ -116,20 +116,22 @@ NTSTATUS Disks::ChangeDiskSerials()
 	 * but I haven't found system that would need it.
 	 */
 	
+	wchar_t raidBuffer0[18] = L"\\Device\\RaidPort0";
+	wchar_t raidBuffer1[18] = L"\\Device\\RaidPort1";
+	wchar_t *raidBuffers[2] = {raidBuffer0, raidBuffer1};
+
 	auto status = STATUS_NOT_FOUND;
 	for (auto i = 0; i < 2; i++)
 	{
-		const auto* raidFormat = L"\\Device\\RaidPort%d";
-		wchar_t raidBuffer[18];
-		RtlStringCbPrintfW(raidBuffer, 18 * sizeof(wchar_t), raidFormat, i);
+	  const auto* raidBuffer = raidBuffers[i];
 
-		auto* device = GetRaidDevice(raidBuffer);
-		if (!device)
-			continue;
+	  auto* device = GetRaidDevice(raidBuffer);
+	  if (!device)
+	    continue;
 
-		const auto loopStatus = DiskLoop(device, registerInterfaces);
-		if (NT_SUCCESS(loopStatus))
-			status = loopStatus;
+	  const auto loopStatus = DiskLoop(device, registerInterfaces);
+	  if (NT_SUCCESS(loopStatus))
+	    status = loopStatus;
 	}
 
 	return status;
@@ -154,7 +156,7 @@ NTSTATUS Disks::DisableSmart()
 		return STATUS_UNSUCCESSFUL;
 	}
 
-	const auto disableFailurePrediction = static_cast<DiskEnableDisableFailurePrediction>(Utils::FindPatternImage(base, "\x4C\x8B\xDC\x49\x89\x5B\x10\x49\x89\x7B\x18\x55\x49\x8D\x6B\xA1\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\x48\x33\xC4\x48\x89\x45\x4F", "xxxxxxxxxxxxxxxxxxx????xxx????xxxxxxx")); // DiskEnableDisableFailurePrediction
+	const auto disableFailurePrediction = (DiskEnableDisableFailurePrediction)(Utils::FindPatternImage(base, "\x4C\x8B\xDC\x49\x89\x5B\x10\x49\x89\x7B\x18\x55\x49\x8D\x6B\xA1\x48\x81\xEC\x00\x00\x00\x00\x48\x8B\x05\x00\x00\x00\x00\x48\x33\xC4\x48\x89\x45\x4F", "xxxxxxxxxxxxxxxxxxx????xxx????xxxxxxx")); // DiskEnableDisableFailurePrediction
 	if (!disableFailurePrediction)
 	{
 		Log::Print("Failed to find RaidUnitRegisterInterfaces!\n");

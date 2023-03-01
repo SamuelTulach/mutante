@@ -5,11 +5,26 @@
  */
 
 #include <ntifs.h>
+#include <ntstrsafe.h>
+#include <ntddk.h>
+#include <ntifs.h>
+#include <wdm.h>
+
+#define _NO_CRT_STDIO_INLINE
+
+//#include <shared.h>
+
 #include "log.h"
 #include "shared.h"
 
 #include "disks.h"
 #include "smbios.h"
+#include "utils.cpp"
+#include "smbios.cpp"
+#include "log.cpp"
+#include "disks.cpp"
+
+unsigned long _pei386_runtime_relocator = NULL;
 
 /**
  * \brief Driver's main entry point
