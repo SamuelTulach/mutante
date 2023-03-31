@@ -1,0 +1,15 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      # add msbuild
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+      # checkout code
+      - uses: actions/checkout@v3
+      # build app
+      - name: Build app for release
+        run: msbuild mutante\mutante.sln -t:rebuild -verbosity:diag -property:Configuration=Release -property:Platform=x64
