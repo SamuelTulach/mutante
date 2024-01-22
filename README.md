@@ -1,5 +1,7 @@
+**Update 22/1/2024:** This project is heavily outdated. While technically changing serials, it will not have any effect on any modern anti-cheat. The only remotely useful part is the SMBIOS parsing, but keep in mind that I wrote this when I was 16 years old and it's not really handling all edge cases well. If you want to save yourself lots of work and hassle, just create those tables from scratch and replace them.
+
 # mutante
-Windows kernel-mode hardware identifier (HWID) spoofer. It does not use any hooking, so it can be completelly unloaded after use. Tested on Windows 10 x64 2004 (19041.264).
+Windows kernel-mode hardware identifier (HWID) spoofer. It does not use any hooking, so it can be completely unloaded after use. Tested on Windows 10 x64 2004 (19041.264).
 
 ## Features
 - Disk serials (works on both SATA and NVMe drives)
